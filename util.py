@@ -1,3 +1,4 @@
+"""Utility module that helps get a webplayer access token"""
 import os
 import requests
 
@@ -43,7 +44,7 @@ def _get_access_token(session, cookies):
     expiration = response.cookies['wp_expiration']
     expiration_date = int(expiration) // 1000
 
-    return access_token
+    return access_token, expiration_date
 
 
 
@@ -66,6 +67,7 @@ def start_session(username=None, password=None):
     token = _get_csrf(session, cookies)
 
     _login(session, cookies, username, password, token)
-    access_token = _get_access_token(session, cookies)
+    access_token, expiration_date = _get_access_token(session, cookies)
 
-    return token
+    data = [access_token, expiration_date]
+    return data
