@@ -2,23 +2,24 @@
 spotify-webplayer-accesstoken
 ======================
 
-Utility script to get Spotify'92s web player access token which has more permissions than the normal one that can be obtained through the Spotify API.
+Utility script to get Spotify's web player access token which has more permissions than the normal one that can be obtained through the Spotify API.
 
-This was inspired by `kopiro'92s`<https://github.com/kopiro>` work on the same thing on Node (`link<https://github.com/kopiro/node-spotify-webplayer-accesstoken>').
+This was inspired by `kopiro <https://github.com/kopiro>`_'s work on the same thing on Node (`link <https://github.com/kopiro/node-spotify-webplayer-accesstoken>`_).
 
 Installing
-============
-::bash
+============ 
+
+::
+
     pip install spotify_token
 
 Usage
 ============
-An access token can be obtained by running the following:
+An access token can be obtained by running the following::
 
-::python
-    from spotify_token import util
+    import spotify_token as st
 
-    data = util.start_session("myusername","mypassword")
+    data = st.start_session("myusername","mypassword")
     access_token = data[0]
     expiration_date = data[1]
 
