@@ -1,6 +1,8 @@
 """Utility module that helps get a webplayer access token"""
 import os
 import requests
+from bs4 import BeautifulSoup
+import json
 
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) \
 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
@@ -38,11 +40,15 @@ def _get_access_token(session, cookies):
     response = session.get("https://open.spotify.com/browse",
                            headers=headers, cookies=cookies)
     response.raise_for_status()
+    data = response.content.decode("utf-8")
 
-    access_token = response.cookies['wp_access_token']
+    xml_tree = BeautifulSoup(data, 'lxml')
+    script_node = xml_tree.find("script", id="config")
+    config = json.loads(script_node.string)
 
-    expiration = response.cookies['wp_expiration']
-    expiration_date = int(expiration) // 1000
+    access_token = config['accessToken']
+    expires_timestamp = config['accessTokenExpirationTimestampMs']
+    expiration_date = int(expires_timestamp) // 1000
 
     return access_token, expiration_date
 
