@@ -30,7 +30,12 @@ def _login(session, cookies, username, password, csrf_token):
     response = session.post("https://accounts.spotify.com/api/login",
                             data=data, cookies=cookies, headers=headers)
 
-    response.raise_for_status()
+    if not response.ok:
+        message = ("\nStatus Code: {} \nURL: {}\nReason: {}\n"
+                   "Response: {}").format(response.status_code,
+                                          response.url, response.reason,
+                                          response.text)
+        raise requests.exceptions.HTTPError(message, response=response)
 
 
 def _get_access_token(session, cookies):
@@ -51,7 +56,6 @@ def _get_access_token(session, cookies):
     expiration_date = int(expires_timestamp) // 1000
 
     return access_token, expiration_date
-
 
 
 def start_session(username=None, password=None):
