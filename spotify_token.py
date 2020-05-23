@@ -7,77 +7,21 @@ import json
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) \
 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
 
+def start_session(dc=None, key=None):
+    """ Starts session to get access token. """
 
-def _get_csrf(session, cookies):
-    """ Get CSRF token for Spotify login. """
+    session = requests.Session()
+
+    cookies = {'sp_dc': dc, 'sp_key': key}
     headers = {'user-agent': USER_AGENT}
 
-    response = session.get("https://accounts.spotify.com/login",
-                           headers=headers, cookies=cookies)
-    response.raise_for_status()
-
-    return response.cookies['csrf_token']
-
-
-# pylint: disable=too-many-arguments
-def _login(session, cookies, username, password, csrf_token):
-    """ Logs in with CSRF token and cookie within session. """
-    headers = {'user-agent': USER_AGENT}
-
-    data = {"remember": False, "username": username, "password": password,
-            "csrf_token": csrf_token}
-
-    response = session.post("https://accounts.spotify.com/api/login",
-                            data=data, cookies=cookies, headers=headers)
-
-    if not response.ok:
-        message = ("\nStatus Code: {} \nURL: {}\nReason: {}\n"
-                   "Response: {}").format(response.status_code,
-                                          response.url, response.reason,
-                                          response.text)
-        raise requests.exceptions.HTTPError(message, response=response)
-
-
-def _get_access_token(session, cookies):
-    """ Gets access token after login has been successful. """
-    headers = {'user-agent': USER_AGENT}
-
-    response = session.get("https://open.spotify.com/browse",
+    response = session.get("https://open.spotify.com/get_access_token?reason=transport&productType=web_player",
                            headers=headers, cookies=cookies)
     response.raise_for_status()
     data = response.content.decode("utf-8")
-
-    xml_tree = BeautifulSoup(data, 'lxml')
-    script_node = xml_tree.find("script", id="config")
-    config = json.loads(script_node.string)
+    config = json.loads(data)
 
     access_token = config['accessToken']
     expires_timestamp = config['accessTokenExpirationTimestampMs']
     expiration_date = int(expires_timestamp) // 1000
-
     return access_token, expiration_date
-
-
-def start_session(username=None, password=None):
-    """ Starts session to get access token. """
-
-    # arbitrary value and can be static
-    cookies = {"__bon": "MHwwfC01ODc4MjExMzJ8LTI0Njg4NDg3NTQ0fDF8MXwxfDE="}
-
-    if username is None:
-        username = os.getenv("SPOTIFY_USERNAME")
-
-    if password is None:
-        password = os.getenv("SPOTIFY_PASS")
-
-    if username is None or password is None:
-        raise Exception("No username or password")
-
-    session = requests.Session()
-    token = _get_csrf(session, cookies)
-
-    _login(session, cookies, username, password, token)
-    access_token, expiration_date = _get_access_token(session, cookies)
-
-    data = [access_token, expiration_date]
-    return data
