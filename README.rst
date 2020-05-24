@@ -15,11 +15,20 @@ Installing
 
 Usage
 ============
+
+To obtain the cookies (valid for 1 year):
+* Open a new __Incognito window__ in Chrome (or another browser) at https://accounts.spotify.com/en/login?continue=https:%2F%2Fopen.spotify.com%2F
+* Open Developer Tools in your browser (might require developer menu to be enabled in some browsers)
+* Login to Spotify.
+* Search/Filter for `get_access_token` in Developer tools under Network.
+* Under cookies for the request save the values for `sp_dc` and `sp_key`.
+* Close the window without logging out (Otherwise the cookies are made invalid).
+
 An access token can be obtained by running the following::
 
     import spotify_token as st
 
-    data = st.start_session("myusername","mypassword")
+    data = st.start_session("sp_dc","sp_key")
     access_token = data[0]
     expiration_date = data[1]
 
