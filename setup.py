@@ -9,7 +9,7 @@ with open("requirements.txt") as rq:
 setup(
     name='spotify_token',
     py_modules=['spotify_token'],
-    version='0.1.3',
+    version='1.0.0',
     description='Python wrapper for Spotify Webplayer access token',
     author='Enrique Gonzalez',
     author_email='egonzalezh94@gmail.com',
