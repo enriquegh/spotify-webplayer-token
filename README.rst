@@ -17,12 +17,18 @@ Usage
 ============
 
 To obtain the cookies (valid for 1 year):
-* Open a new __Incognito window__ in Chrome (or another browser) at https://accounts.spotify.com/en/login?continue=https:%2F%2Fopen.spotify.com%2F
-* Open Developer Tools in your browser (might require developer menu to be enabled in some browsers)
-* Login to Spotify.
-* Search/Filter for `get_access_token` in Developer tools under Network.
-* Under cookies for the request save the values for `sp_dc` and `sp_key`.
-* Close the window without logging out (Otherwise the cookies are made invalid).
+
+1. Open a new **Incognito window** in Chrome (or another browser) at https://accounts.spotify.com/en/login?continue=https:%2F%2Fopen.spotify.com%2F
+
+2. Open Developer Tools in your browser (might require developer menu to be enabled in some browsers)
+
+3. Login to Spotify.
+
+4. Search/Filter for `get_access_token` in Developer tools under Network.
+
+5. Under cookies for the request save the values for `sp_dc` and `sp_key`.
+
+6. Close the window without logging out (Otherwise the cookies are made invalid).
 
 An access token can be obtained by running the following::
 
