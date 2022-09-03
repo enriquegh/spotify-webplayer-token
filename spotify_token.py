@@ -4,8 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) \
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
+    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
 
 def start_session(dc=None, key=None):
     """ Starts session to get access token. """
